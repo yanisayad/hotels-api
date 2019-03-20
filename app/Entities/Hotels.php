@@ -135,6 +135,7 @@ class Hotels implements \JsonSerializable
     public function toArray()
     {
         return [
+            "id"        => $this->getId(),
             "name"      => $this->getName(),
             "website"   => $this->getWebsite()
         ];
@@ -153,7 +154,6 @@ class Hotels implements \JsonSerializable
     public function setProperties(array $data)
     {
         $mandatory_fields = [
-            "id",
             "name",
             "website"
         ];

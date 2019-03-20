@@ -32,7 +32,7 @@ class ReservationsController implements ControllerProviderInterface
         $controllers->get('/reservation/{reservation_id}', [$this, 'getReservationById']);
 
         // On crée un utilisateur
-        $controllers->post('/reservation', [$this, 'createReservation']);
+        $controllers->post('/hotel/{hotel_id}/room/{room_id}/reservation', [$this, 'createReservation']);
 
         // On crée un utilisateur
         // $controllers->get('/user/validate/{email}', [$this, 'validateAccount']);

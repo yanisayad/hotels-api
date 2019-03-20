@@ -32,7 +32,7 @@ class RoomsController implements ControllerProviderInterface
         $controllers->get('/room/{room_id}', [$this, 'getRoomById']);
 
         // On crée un utilisateur
-        $controllers->post('/room', [$this, 'createRoom']);
+        $controllers->post('hotel/{hotel_id}/room', [$this, 'createRoom']);
 
         // On crée un utilisateur
         // $controllers->get('/user/validate/{email}', [$this, 'validateAccount']);
@@ -48,7 +48,7 @@ class RoomsController implements ControllerProviderInterface
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getAllRooms(Application $app, Request $request)
+    public function getAllRooms(Application $app)
     {
         $all_rooms = $app["repositories"]("Rooms")->findAll();
 
@@ -75,17 +75,31 @@ class RoomsController implements ControllerProviderInterface
      {
      }
     */
-    public function createHotel(Application $app, Request $req)
+    public function createRoom(Application $app, Request $req, $hotel_id)
     {
-        $datas = $req->request->all();
+        $hotel = $app["repositories"]("Hotels")->findOneById($hotel_id);
 
-        $room = new Hotels();
+        if ($hotel === null) {
+            return $app->abort(404, "Hotel {$hotel_id} doesnt exist");
+        }
 
-        $room->setProperties($datas);
-        $room->setPassword(sha1($datas["password"]));
-        $room->setLatitude($datas["lat"]);
-        $room->setLongitude($datas["lng"]);
-        $room->setIsActive(true);
+        $name         = $req->request->get("name", null);
+        $people       = $req->request->get("people", null);
+        $informations = $req->request->get("informations", null);
+        $price        = $req->request->get("price", null);
+
+        if (in_array(null, [$name, $people, $price])) {
+            return $app->abort(400, "Bad field provided");
+        }
+
+        $room = new Rooms();
+
+        $room->setName($name);
+        $room->setPeople($people);
+        $room->setInformations($informations);
+        $room->setPrice($price);
+        $room->setHotel($hotel);
+
         $app["orm.em"]->persist($room);
         $app["orm.em"]->flush();
 

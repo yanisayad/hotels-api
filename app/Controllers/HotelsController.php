@@ -32,6 +32,9 @@ class HotelsController implements ControllerProviderInterface
         $controllers->get('/hotel/{hotel_id}', [$this, 'getHotelById']);
 
         // On crée un utilisateur
+        $controllers->put('/hotel/{hotel_id}', [$this, 'updateHotel']);
+
+        // On crée un utilisateur
         $controllers->post('/hotel', [$this, 'createHotel']);
 
         // On crée un utilisateur
@@ -64,23 +67,73 @@ class HotelsController implements ControllerProviderInterface
      */
     public function getHotelById(Application $app, $hotel_id)
     {
-        $room = $app["repositories"]("Hotels")->findOneById($hotel_id);
+        $hotel = $app["repositories"]("Hotels")->findOneById($hotel_id);
 
-        return $app->json($room, 200);
+        return $app->json($hotel, 200);
     }
 
+    /**
+     * Modifie un hotel existant
+     *
+     * @param Application $app Silex Application
+     * @param integer     $hotel_id id de l'hotel
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function updateHotel(Application $app, Request $req, $hotel_id)
+    {
+        $hotel = $app["repositories"]("Hotels")->findOneById($hotel_id);
+
+        if ($hotel === null) {
+            return $app->abort(404, "Hotel {$hotel_id} doesnt exist.");
+        }
+
+        $name    = $req->request->get("name", null);
+        $website = $req->request->get("website", null);
+
+        if (in_array(null, [$name, $website])) {
+            return $app->abort(400, "Bad field provided");
+        }
+
+        $hotel->setName($name);
+        $hotel->setWebsite($website);
+
+        $app["orm.em"]->persist($hotel);
+        $app["orm.em"]->flush();
+
+        return $app->json($hotel, 200);
+    }
+
+
+    /**
+     * Creation d'un hotel
+     *
+     * @param Application $app Silex Application
+     * @param Request     $req Request
+     * @param integer     $hotel_id id de l'hotel
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     /*
      ----- Prototype de body de requete -----
      {
+         "name":   "hotel_name",
+         "website: "hotel_website"
      }
     */
     public function createHotel(Application $app, Request $req)
     {
-        $datas = $req->request->all();
+        $name    = $req->request->get("name", null);
+        $website = $req->request->get("website", null);
+
+        if (in_array(null, [$name, $website])) {
+            return $app->abort(400, "Bad field provided");
+        }
 
         $hotel = new Hotels();
 
-        $hotel->setProperties($datas);
+        $hotel->setName($name);
+        $hotel->setWebsite($website);
 
         $app["orm.em"]->persist($hotel);
         $app["orm.em"]->flush();
