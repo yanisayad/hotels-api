@@ -165,7 +165,6 @@ class Users implements \JsonSerializable
     public function setProperties(array $data)
     {
         $mandatory_fields = [
-            "id",
             "login",
             "email",
             "birthdate"

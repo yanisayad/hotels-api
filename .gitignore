@@ -47,6 +47,5 @@
 
 /.idea/
 .env
-.env.dev
 .mail.dev
 cache

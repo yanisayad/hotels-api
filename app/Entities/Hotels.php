@@ -25,15 +25,15 @@ class Hotels implements \JsonSerializable
      */
     protected $website;
 
-    // /**
-    //  * @OneToMany(targetEntity="Rooms", mappedBy="hotel")
-    //  */
-    // protected $rooms;
+    /**
+     * @OneToMany(targetEntity="Rooms", mappedBy="hotel")
+     */
+    protected $rooms;
 
-    // public function __construct()
-    // {
-    //     $this->rooms = new ArrayCollection();
-    // }
+    public function __construct()
+    {
+        $this->rooms = new ArrayCollection();
+    }
 
     /**************************************/
     /* ------------ Getters ------------ */
@@ -66,6 +66,33 @@ class Hotels implements \JsonSerializable
     public function getWebsite()
     {
         return $this->website;
+    }
+
+    /**
+     * Gets the value of rooms.
+     *
+     * @return ArrayCollections
+     */
+    public function getRooms()
+    {
+        $rooms = $this->rooms->toArray();
+
+        if (empty($rooms)) {
+            return null;
+        }
+        $hotel_rooms = array_map(
+            function ($child) {
+                return [
+                    "id"           => $child->getId(),
+                    "name"         => $child->getName(),
+                    "people"       => $child->getPeople(),
+                    "informations" => $child->getinformations(),
+                    "price"        => $child->getPrice(),
+                ];
+            },
+            $rooms
+        );
+        return $hotel_rooms;
     }
 
     /**************************************/
@@ -108,7 +135,6 @@ class Hotels implements \JsonSerializable
     public function toArray()
     {
         return [
-            "id"        => $this->getId(),
             "name"      => $this->getName(),
             "website"   => $this->getWebsite()
         ];

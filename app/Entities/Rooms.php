@@ -41,6 +41,17 @@ class Rooms implements \JsonSerializable
      */
     protected $hotel;
 
+    /**
+     * @OneToMany(targetEntity="Reservations", mappedBy="hotel")
+     */
+    protected $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
+
+
     /**************************************/
     /* ------------ Getters ------------ */
     /**************************************/
@@ -206,7 +217,6 @@ class Rooms implements \JsonSerializable
     public function setProperties(array $data)
     {
         $mandatory_fields = [
-            "id",
             "name",
             "people",
             "informations",

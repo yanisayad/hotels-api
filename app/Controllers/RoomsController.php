@@ -50,8 +50,6 @@ class RoomsController implements ControllerProviderInterface
      */
     public function getAllRooms(Application $app, Request $request)
     {
-        // $token = substr($request->headers->get('authorization'), 7);
-        // $test = $app['jwt_auth']->getPayload($token);
         $all_rooms = $app["repositories"]("Rooms")->findAll();
 
         return $app->json($all_rooms, 200);
