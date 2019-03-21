@@ -5,6 +5,14 @@ namespace MyHotelService\Controllers;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\Api\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
+
+use MyHotelService\Entities\Users;
+
+use Ofat\SilexJWT\JWTAuth;
+use Ofat\SilexJWT\Middleware\JWTTokenCheck;
 
 class HomeController implements ControllerProviderInterface
 {
@@ -16,7 +24,7 @@ class HomeController implements ControllerProviderInterface
         /* @var $controllers ControllerCollection */
         $controllers = $app['controllers_factory'];
 
-        // On récupère tous les utilisateurs
+        // Page d'accueil
         $controllers->get('/', [$this, 'home']);
 
         return $controllers;
@@ -33,4 +41,5 @@ class HomeController implements ControllerProviderInterface
     {
         return $app->json("home", 200);
     }
+
 }

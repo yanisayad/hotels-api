@@ -180,7 +180,7 @@ class Users implements \JsonSerializable
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = sha1($password);
 
         return $this;
     }

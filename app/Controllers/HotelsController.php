@@ -25,20 +25,17 @@ class HotelsController implements ControllerProviderInterface
         /* @var $controllers ControllerCollection */
         $controllers = $app['controllers_factory'];
 
-        // On récupère tous les utilisateurs
+        // On récupère tous les hotels
         $controllers->get('/hotels', [$this, 'getAllHotels']);
 
-        // On récupère un utilisateur selon un id
+        // On récupère un hotel selon un id
         $controllers->get('/hotel/{hotel_id}', [$this, 'getHotelById']);
 
-        // On crée un utilisateur
+        // On modifie un hotel
         $controllers->put('/hotel/{hotel_id}', [$this, 'updateHotel']);
 
-        // On crée un utilisateur
+        // On crée un hotel
         $controllers->post('/hotel', [$this, 'createHotel']);
-
-        // On crée un utilisateur
-        // $controllers->get('/room/validate/{email}', [$this, 'validateAccount']);
 
         return $controllers;
     }
@@ -104,28 +101,25 @@ class HotelsController implements ControllerProviderInterface
         return $app->json($hotel, 200);
     }
 
-
     /**
      * Creation d'un hotel
      *
      * @param Application $app Silex Application
      * @param Request     $req Request
-     * @param integer     $hotel_id id de l'hotel
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    /*
-     ----- Prototype de body de requete -----
-     {
-            "name",
-            "website",
-            "address",
-            "city",
-            "zipcode"
-     }
-    */
     public function createHotel(Application $app, Request $req)
     {
+        /*
+        ----- Prototype de body de requete -----
+        {
+                "name",
+                "website",
+                "address",
+                "city",
+                "zipcode"
+        }*/
         $data = $req->request->all();
 
         $hotel = new Hotels();

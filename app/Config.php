@@ -35,13 +35,8 @@ class Config implements ServiceProviderInterface
     public function __construct($env = null)
     {
         $dotenv = new Dotenv();
-        $dotenv->load(__DIR__ . '/../.env.dev', __DIR__ . '/../.mail.dev');
-        /*if (null !== $env) {
-            $this->env = $env;
-            if (true === file_exists(__DIR__ . "/Env/{$this->env}.php")) {
-                require_once __DIR__ . "/Env/{$this->env}.php";
-            }
-        }*/
+        // $dotenv->load(__DIR__ . '/../.env.dev', __DIR__ . '/../.mail.dev');
+        $dotenv->load(__DIR__ . '/../.env.dev');
     }
 
     public function authBeforeFunction(Request $req, Application $app)
@@ -50,25 +45,6 @@ class Config implements ServiceProviderInterface
         if ('OPTIONS' === $req->getMethod()) {
             return;
         }
-
-        // On saute les droits et l'authentification
-        $allowed = [];
-
-        //Register silex jwt service provider. Add jwt secret key
-        $app->register(new JWTAuth(), [
-            'jwt.secret' => 'azertyuiopqsdfghjklmwxcvbn'
-        ]);
-
-        //Example of jwt generating
-        // $app->get('/', function (Request $request) use ($app) {
-        //     $req->request->all();
-        //     $userId = 1;
-        //     $test = $app['jwt_auth']->generateToken($userId);
-
-        //     return $app->json(['token' => $app['jwt_auth']->getTokeb()]);
-        // });
-
-
     }
 
     /**
@@ -83,8 +59,6 @@ class Config implements ServiceProviderInterface
             'monolog.logfile' => __DIR__ . '/../storage/log/development.log',
             'monolog.level'   => \Psr\Log\LogLevel::DEBUG
         ));
-
-        //$app->after($app["cors"]);
 
         $app->after(function (Request $request, Response $response) {
             $response = new Response();
@@ -150,10 +124,6 @@ class Config implements ServiceProviderInterface
     private function registerServiceProviders(Application $app)
     {
         $app->register(new Provider\ServiceControllerServiceProvider());
-        $app->register(new JWTAuth(), [
-            'jwt.secret' => 'azertyuiopqsdfghjklmwxcvbn'
-        ]);
-
         $app->register(new DoctrineServiceProvider());
         $app->register(new DoctrineOrmServiceProvider());
 
