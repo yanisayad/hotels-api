@@ -28,25 +28,39 @@ class Reservations implements \JsonSerializable
     protected $user;
 
     /**
-     * @Column(type="integer", name="has_parking")
+     * @Column(type="datetime", name="date_start")
+     */
+    protected $date_start;
+
+    /**
+     * @Column(type="datetime", name="date_end")
+     */
+    protected $date_end;
+
+    /**
+     * @Column(type="boolean", name="has_parking")
      */
     protected $has_parking;
 
     /**
-     * @Column(type="integer", name="has_baby_bed")
+     * @Column(type="boolean", name="has_baby_bed")
      */
     protected $has_baby_bed;
 
     /**
-     * @Column(type="integer", name="has_romance_pack")
+     * @Column(type="boolean", name="has_romance_pack")
      */
     protected $has_romance_pack;
 
     /**
-     * @Column(type="integer", name="has_breakfast")
+     * @Column(type="boolean", name="has_breakfast")
      */
     protected $has_breakfast;
 
+    /**
+     * @Column(type="float", name="final_price")
+     */
+    protected $final_price;
 
     /**************************************/
     /* ------------ Getters ------------ */
@@ -85,7 +99,7 @@ class Reservations implements \JsonSerializable
     /**
      * Gets the value of has_parking.
      *
-     * @return integer
+     * @return boolean
      */
     public function getHasParking()
     {
@@ -95,7 +109,7 @@ class Reservations implements \JsonSerializable
     /**
      * Gets the value of has_baby_bed.
      *
-     * @return integer
+     * @return boolean
      */
     public function getHasBabyBed()
     {
@@ -105,7 +119,7 @@ class Reservations implements \JsonSerializable
     /**
      * Gets the value of has_romance_pack.
      *
-     * @return integer
+     * @return boolean
      */
     public function getHasRomancePack()
     {
@@ -113,24 +127,55 @@ class Reservations implements \JsonSerializable
     }
 
     /**
-     * Gets the value of id.
+     * Gets the value of has_breakfast.
      *
-     * @return integer
+     * @return boolean
      */
     public function getHasBreakfast()
     {
         return $this->has_breakfast;
     }
 
+    /**
+     * Gets the value of date_start.
+     *
+     * @return datetime
+     */
+    public function getDateStart()
+    {
+        return $this->date_start;
+    }
+
+    /**
+     * Gets the value of date_end.
+     *
+     * @return datetime
+     */
+    public function getDateEnd()
+    {
+        return $this->date_end;
+    }
+
+    /**
+     * Gets the value of final_price.
+     *
+     * @return float
+     */
+    public function getFinalPrice()
+    {
+        return $this->final_price;
+    }
 
     /**************************************/
     /* ------------ SETTERS ------------ */
     /**************************************/
 
     /**
-     * Gets the value of room.
+     * Sets the value of room.
      *
-     * @return Room
+     * @param Room $room the room
+     *
+     * @return self
      */
     public function setRoom(Room $room)
     {
@@ -140,9 +185,11 @@ class Reservations implements \JsonSerializable
     }
 
     /**
-     * Gets the value of user.
+     * Sets the value of user.
      *
-     * @return User
+     * @param User $user the user
+     *
+     * @return self
      */
     public function setUser(User $user)
     {
@@ -152,9 +199,39 @@ class Reservations implements \JsonSerializable
     }
 
     /**
-     * Gets the value of has_parking.
+     * Sets the value of date_start.
      *
-     * @return integer
+     * @param DateTime $date_start the date_start
+     *
+     * @return self
+     */
+    public function setDateStart(\DateTime $date_start)
+    {
+        $this->date_start = $date_start;
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of date_end.
+     *
+     * @param DateTime $date_end the date_end
+     *
+     * @return self
+     */
+    public function setDateEnd(\DateTime $date_end)
+    {
+        $this->date_end = $date_end;
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of has_parking.
+     *
+     * @param boolean $has_parking the has_parking
+     *
+     * @return self
      */
     public function setHasParking($has_parking)
     {
@@ -164,9 +241,11 @@ class Reservations implements \JsonSerializable
     }
 
     /**
-     * Gets the value of has_baby_bed.
+     * Sets the value of has_baby_bed.
      *
-     * @return integer
+     * @param boolean $has_baby_bed the has_baby_bed
+     *
+     * @return self
      */
     public function setHasBabyBed($has_baby_bed)
     {
@@ -176,9 +255,11 @@ class Reservations implements \JsonSerializable
     }
 
     /**
-     * Gets the value of has_romance_pack.
+     * Sets the value of has_romance_pack.
      *
-     * @return integer
+     * @param boolean $has_romance_pack the has_romance_pack
+     *
+     * @return self
      */
     public function setHasRomancePack($has_romance_pack)
     {
@@ -188,13 +269,29 @@ class Reservations implements \JsonSerializable
     }
 
     /**
-     * Gets the value of id.
+     * Sets the value of has_breakfast.
      *
-     * @return integer
+     * @param boolean $has_breakfast the has_breakfast
+     *
+     * @return self
      */
     public function setHasBreakfast($has_breakfast)
     {
         $this->has_breakfast = $has_breakfast;
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of final_price.
+     *
+     * @param boolean $final_price the final_price
+     *
+     * @return self
+     */
+    public function setFinalPrice($final_price)
+    {
+        $this->final_price = $final_price;
 
         return $this;
     }
@@ -207,12 +304,14 @@ class Reservations implements \JsonSerializable
     {
         return [
             "id"               => $this->getId(),
-            "hotel"            => $this->getRoom()->getHotel(),
             "room"             => $this->getRoom(),
+            "start"            => $this->getDateStart(),
+            "end"              => $this->getDateEnd(),
             "has_parking"      => $this->getHasParking(),
             "has_baby_bed"     => $this->getHasBabyBed(),
             "has_romance_pack" => $this->getHasRomancePack(),
-            "has_breakfast"    => $this->getHasBreakfast()
+            "has_breakfast"    => $this->getHasBreakfast(),
+            "final_price"      => $this->getFinalPrice()
         ];
     }
 
@@ -231,10 +330,13 @@ class Reservations implements \JsonSerializable
         $mandatory_fields = [
             "hotel",
             "room",
+            "start",
+            "end",
             "has_parking",
             "has_baby_bed",
             "has_romance_pack",
-            "has_breakfast"
+            "has_breakfast",
+            "final_price"
         ];
 
         $fields = array_intersect(

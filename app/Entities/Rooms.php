@@ -16,30 +16,16 @@ class Rooms implements \JsonSerializable
     use AutoIncrementID;
 
     /**
-     * @Column(type="string", name="name ", length=45, nullable=false)
-     */
-    protected $name;
-
-    /**
-     * @Column(type="integer", name="nb_people")
-     */
-    protected $people;
-
-    /**
-     * @Column(type="string", name="informations", length=45, nullable=false)
-     */
-    protected $informations;
-
-    /**
-     * @Column(type="integer", name="price")
-     */
-    protected $price;
-
-    /**
      * @ManyToOne(targetEntity="Hotels", inversedBy="rooms")
      * @JoinColumn(name="hotel_id", referencedColumnName="id")
      */
     protected $hotel;
+
+    /**
+     * @OneToOne(targetEntity="Categories")
+     * @JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    protected $category;
 
     /**
      * @OneToMany(targetEntity="Reservations", mappedBy="hotel")
@@ -50,7 +36,6 @@ class Rooms implements \JsonSerializable
     {
         $this->reservations = new ArrayCollection();
     }
-
 
     /**************************************/
     /* ------------ Getters ------------ */
@@ -66,43 +51,13 @@ class Rooms implements \JsonSerializable
     }
 
     /**
-     * Gets the value of name.
+     * Gets the value of category.
      *
-     * @return string
+     * @return Categories
      */
-    public function getName()
+    public function getCategory()
     {
-        return $this->name;
-    }
-
-    /**
-     * Gets the value of people.
-     *
-     * @return integer
-     */
-    public function getPeople()
-    {
-        return $this->people;
-    }
-
-    /**
-     * Gets the value of informations.
-     *
-     * @return string
-     */
-    public function getInformations()
-    {
-        return $this->informations;
-    }
-
-    /**
-     * Gets the value of price.
-     *
-     * @return integer
-     */
-    public function getPrice()
-    {
-        return $this->price;
+        return $this->category;
     }
 
     /**
@@ -120,57 +75,15 @@ class Rooms implements \JsonSerializable
     /**************************************/
 
     /**
-     * Sets the value of name.
+     * Sets the value of category.
      *
-     * @param string $name the name
-     *
-     * @return self
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of people.
-     *
-     * @param integer $people the people
+     * @param Categories $category the category
      *
      * @return self
      */
-    public function setPeople($people)
+    public function setCategory($category)
     {
-        $this->people = $people;
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of informations.
-     *
-     * @param string $informations the informations
-     *
-     * @return self
-     */
-    public function setInformations($informations)
-    {
-        $this->informations = $informations;
-
-        return $this;
-    }
-
-    /**
-     * Sets the value of price.
-     *
-     * @param integer $price the price
-     *
-     * @return self
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
+        $this->category = $category;
 
         return $this;
     }
@@ -196,11 +109,9 @@ class Rooms implements \JsonSerializable
     public function toArray()
     {
         return [
-            "id"           => $this->getId(),
-            "name"         => $this->getName(),
-            "people"       => $this->getPeople(),
-            "informations" => $this->getinformations(),
-            "price"        => $this->getPrice(),
+            "id"       => $this->getId(),
+            "category" => $this->getCategory(),
+            "hotel"    => $this->getHotel()
         ];
     }
 
@@ -217,9 +128,7 @@ class Rooms implements \JsonSerializable
     public function setProperties(array $data)
     {
         $mandatory_fields = [
-            "name",
-            "people",
-            "informations",
+            "category",
             "hotel"
         ];
 

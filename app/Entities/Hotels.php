@@ -16,14 +16,29 @@ class Hotels implements \JsonSerializable
     use AutoIncrementID;
 
     /**
-     * @Column(type="string", name="name", length=45, nullable=false)
+     * @Column(type="string", name="name", length=255)
      */
     protected $name;
 
     /**
-     * @Column(type="string", name="website", length=45, nullable=false)
+     * @Column(type="string", name="website", length=255)
      */
     protected $website;
+
+    /**
+     * @Column(type="string", name="address", length=255)
+     */
+    protected $address;
+
+    /**
+     * @Column(type="string", name="city", length=255)
+     */
+    protected $city;
+
+    /**
+     * @Column(type="integer", name="zipcode", length=5)
+     */
+    protected $zipcode;
 
     /**
      * @OneToMany(targetEntity="Rooms", mappedBy="hotel")
@@ -66,6 +81,36 @@ class Hotels implements \JsonSerializable
     public function getWebsite()
     {
         return $this->website;
+    }
+
+    /**
+     * Gets the value of address.
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Gets the value of city.
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Gets the value of zipcode.
+     *
+     * @return integer
+     */
+    public function getZipcode()
+    {
+        return $this->zipcode;
     }
 
     /**
@@ -127,6 +172,46 @@ class Hotels implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * Sets the value of address.
+     *
+     * @param string $address the address
+     *
+     * @return self
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of city.
+     *
+     * @param string $city the city
+     *
+     * @return self
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Sets the value of zipcode.
+     *
+     * @param string $zipcode the zipcode
+     *
+     * @return self
+     */
+    public function setZipcode()
+    {
+        return $this->zipcode;
+    }
+
 
     /**************************************/
     /* ------------ Utils ------------ */
@@ -137,7 +222,10 @@ class Hotels implements \JsonSerializable
         return [
             "id"        => $this->getId(),
             "name"      => $this->getName(),
-            "website"   => $this->getWebsite()
+            "website"   => $this->getWebsite(),
+            "address"   => $this->getAddress(),
+            "city"      => $this->getCity(),
+            "zipcode"   => $this->getZipcode()
         ];
     }
 
@@ -155,7 +243,10 @@ class Hotels implements \JsonSerializable
     {
         $mandatory_fields = [
             "name",
-            "website"
+            "website",
+            "address",
+            "city",
+            "zipcode"
         ];
 
         $fields = array_intersect(
