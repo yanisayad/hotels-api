@@ -117,23 +117,20 @@ class HotelsController implements ControllerProviderInterface
     /*
      ----- Prototype de body de requete -----
      {
-         "name":   "hotel_name",
-         "website: "hotel_website"
+            "name",
+            "website",
+            "address",
+            "city",
+            "zipcode"
      }
     */
     public function createHotel(Application $app, Request $req)
     {
-        $name    = $req->request->get("name", null);
-        $website = $req->request->get("website", null);
-
-        if (in_array(null, [$name, $website])) {
-            return $app->abort(400, "Bad field provided");
-        }
+        $data = $req->request->all();
 
         $hotel = new Hotels();
 
-        $hotel->setName($name);
-        $hotel->setWebsite($website);
+        $hotel->setProperties($data);
 
         $app["orm.em"]->persist($hotel);
         $app["orm.em"]->flush();

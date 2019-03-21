@@ -203,13 +203,15 @@ class Hotels implements \JsonSerializable
     /**
      * Sets the value of zipcode.
      *
-     * @param string $zipcode the zipcode
+     * @param integer $zipcode the zipcode
      *
      * @return self
      */
-    public function setZipcode()
+    public function setZipcode($zipcode)
     {
-        return $this->zipcode;
+        $this->zipcode = $zipcode;
+
+        return $this;
     }
 
 

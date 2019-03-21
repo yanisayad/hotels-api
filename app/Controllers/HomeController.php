@@ -23,7 +23,7 @@ class HomeController implements ControllerProviderInterface
     }
 
     /**
-     * Récupère tous les hotels
+     * Home page
      *
      * @param Application $app Silex Application
      *

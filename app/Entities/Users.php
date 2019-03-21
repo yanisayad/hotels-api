@@ -317,6 +317,7 @@ class Users implements \JsonSerializable
         $mandatory_fields = [
             "firstname",
             "lastname",
+            "password",
             "login",
             "email",
             "address",

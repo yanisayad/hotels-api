@@ -72,17 +72,6 @@ class UsersController implements ControllerProviderInterface
         return $app->json($user, 200);
     }
 
-    public function validateAccount(Application $app, $email)
-    {
-        if (($user = $app["repositories"]("Users")->findOneBy(["email" => base64_decode($email)])) === null)
-            $app->abort(404);
-        $user->setIsActive(true);
-        $app["orm.em"]->persist($user);
-        $app["orm.em"]->flush();
-
-        return $app->redirect($app['app_front']);
-    }
-
     /**
      * Créer un utilisateur
      *
@@ -95,40 +84,38 @@ class UsersController implements ControllerProviderInterface
     /*
      ----- Prototype de body de requete -----
      {
-         "email": "dezeeu_l@etna-alternance.net",
-         "password": "dezeeu_l",
-         "firstname": "Louis",
-         "lastname": "DEZEEU",
-         "longitude": "2.5333",
-         "latitude": "48.9667"
+            "firstname",
+            "lastname",
+            "password
+            "login",
+            "email",
+            "address",
+            "city",
+            "zipcode",
+            "is_admin
      }
     */
     public function createUser(Application $app, Request $req)
     {
-        $datas = $req->request->all();
+        $data = $req->request->all();
 
-        $user = new User();
+        $user = new Users();
+        $user->setProperties($data);
 
-        $user->setProperties($datas);
-        $user->setPassword(sha1($datas["password"]));
-        $user->setLatitude($datas["lat"]);
-        $user->setLongitude($datas["lng"]);
-        $user->setIsActive(true);
         $app["orm.em"]->persist($user);
         $app["orm.em"]->flush();
-
-        // $body = file_get_contents($app['application_path'] . "/resources/views/emails/validate-account.html");
-        // $body = str_replace("{{ firstname }}", $user->getFirstname() . " " . $user->getLastname(), $body);
-        // $body = str_replace("{{ link }}", $app['application_url'] . "user/validate/" . base64_encode($user->getEmail()), $body);
-
-//         $message = new Swift_Message();
-//         $message->setSubject('Inscription MyHotelService')
-//             ->setFrom(array($app['mail_username']))
-//             ->setTo(array($user->getEmail()))
-//             ->setBody($body, 'text/html');
-// //
-        // $app['mailer']->send($message);
 
         return $app->json($user, 200);
     }
 }
+
+// public function validateAccount(Application $app, $email)
+// {
+//     if (($user = $app["repositories"]("Users")->findOneBy(["email" => base64_decode($email)])) === null)
+//         $app->abort(404);
+//     $user->setIsActive(true);
+//     $app["orm.em"]->persist($user);
+//     $app["orm.em"]->flush();
+
+//     return $app->redirect($app['app_front']);
+// }
