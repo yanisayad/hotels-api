@@ -4,26 +4,12 @@ Prérequis :
 
 `Pensez un importer la base de données du projet pour ceux qui ne l'ont pas fait.`
 
-Installation :
+Build docker :
 ```
-composer install
-```
-
-Réinstallation (après modification des dépendances dans `composer.json`) :
-```
-rm -rf vendor/ composer.lock
-composer install
+docker build -t composer .
 ```
 
-Pour lancer le serveur php en local :
+Run docker :
 ```
-composer dev >&/dev/null &
+docker run -dip 7777:7777 --name hotels-api composer:latest
 ```
-<!-- php -S localhost:7777 -t public public/index.php -->
-
-
-On accède via :
-```
-http://localhost:7777/
-```
-
